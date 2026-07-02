@@ -38,14 +38,25 @@ data/
 
 **Stack :** TypeScript + Node.js, SDK officiel `@modelcontextprotocol/sdk`, validation des entrées avec `zod`.
 
+## Le repo
+
+https://github.com/fanchmorvanroncier/MCP-Todo-Projet-p-dagogique
+
 ## Comment le tester soi-même
+
+### 0. Récupérer le projet
+
+```bash
+git clone https://github.com/fanchmorvanroncier/MCP-Todo-Projet-p-dagogique.git
+cd MCP-Todo-Projet-p-dagogique
+npm install
+```
 
 ### Option 1 — MCP Inspector (le plus simple pour explorer)
 
 Outil officiel avec une interface web, qui permet d'appeler chaque outil à la main et de voir les échanges bruts du protocole (utile pour *voir* concrètement ce qu'est le MCP).
 
 ```bash
-npm install
 npm run inspector
 ```
 
