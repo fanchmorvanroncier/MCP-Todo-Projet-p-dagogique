@@ -30,6 +30,21 @@ npm run build
 
 Les todos sont numérotés par personne (`1`, `2`, `3`...), pas d'UUID — plus simple à manipuler à la main pendant les tests. `id` accepte un nombre ou une chaîne numérique (`1` ou `"1"`), car certains clients MCP envoient les paramètres en string.
 
+## Resources et prompts
+
+En plus des outils (les *tools*, qui font une action), le serveur expose les deux autres primitives du protocole MCP :
+
+- **Resource** `todo://{person}/todos` (template dynamique) — expose le contenu JSON brut de la todo list d'une personne, en lecture seule. Le client peut la lister (`resources/list`, une entrée par fichier `data/todos-*.json` existant) ou la lire directement par URI (`resources/read`).
+- **Prompt** `todo_status_report(person)` — génère un message pré-rempli qui embarque la todo list de la personne (via la resource ci-dessus) suivi d'une instruction demandant un résumé en français (total, terminés/en cours, priorités). Utile pour voir comment un prompt MCP peut assembler du contexte pour l'assistant plutôt que de laisser l'utilisateur le taper à la main.
+
+Pour tester sans UI, l'Inspector a un mode CLI non-interactif :
+
+```bash
+npx @modelcontextprotocol/inspector --cli node dist/index.js --method resources/templates/list
+npx @modelcontextprotocol/inspector --cli node dist/index.js --method resources/read --uri "todo://fanch/todos"
+npx @modelcontextprotocol/inspector --cli node dist/index.js --method prompts/get --prompt-name todo_status_report --prompt-args person=fanch
+```
+
 ## Comment tester
 
 ### Option A — MCP Inspector (recommandé pour découvrir le protocole)

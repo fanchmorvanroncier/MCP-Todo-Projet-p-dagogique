@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -78,4 +78,12 @@ export async function deleteTodo(person: string, id: number): Promise<void> {
   const next = todos.filter((t) => t.id !== id);
   if (next.length === todos.length) throw new Error(`Todo ${id} introuvable pour ${person}`);
   await writeTodos(person, next);
+}
+
+export async function listPersons(): Promise<string[]> {
+  await mkdir(DATA_DIR, { recursive: true });
+  const files = await readdir(DATA_DIR);
+  return files
+    .map((f) => f.match(/^todos-(.+)\.json$/)?.[1])
+    .filter((p): p is string => Boolean(p));
 }

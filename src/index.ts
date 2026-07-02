@@ -1,7 +1,7 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { addTodo, deleteTodo, listTodos, setTodoDone, updateTodo, type Todo } from "./storage.js";
+import { addTodo, deleteTodo, listPersons, listTodos, setTodoDone, updateTodo, type Todo } from "./storage.js";
 
 const server = new McpServer({
   name: "todo-mcp-server",
@@ -99,6 +99,76 @@ server.registerTool(
   async ({ person, id }) => {
     await deleteTodo(person, id);
     return { content: [{ type: "text", text: `Todo ${id} supprimé pour ${person}.` }] };
+  }
+);
+
+server.registerResource(
+  "todos",
+  new ResourceTemplate("todo://{person}/todos", {
+    list: async () => {
+      const persons = await listPersons();
+      return {
+        resources: persons.map((person) => ({
+          uri: `todo://${person}/todos`,
+          name: `todos-${person}`,
+          title: `Todos de ${person}`,
+          mimeType: "application/json",
+        })),
+      };
+    },
+  }),
+  {
+    title: "Todos d'une personne",
+    description: "Contenu JSON complet de la todo list d'une personne (lecture seule)",
+    mimeType: "application/json",
+  },
+  async (uri, { person }) => {
+    const todos = await listTodos(String(person));
+    return {
+      contents: [
+        {
+          uri: uri.href,
+          mimeType: "application/json",
+          text: JSON.stringify(todos, null, 2),
+        },
+      ],
+    };
+  }
+);
+
+server.registerPrompt(
+  "todo_status_report",
+  {
+    title: "Rapport de statut todo",
+    description: "Prépare un message qui embarque la todo list d'une personne et demande un résumé de son état",
+    argsSchema: {
+      person: z.string().describe("Nom de la personne dont on veut le rapport"),
+    },
+  },
+  async ({ person }) => {
+    const todos = await listTodos(person);
+    return {
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "resource",
+            resource: {
+              uri: `todo://${person}/todos`,
+              mimeType: "application/json",
+              text: JSON.stringify(todos, null, 2),
+            },
+          },
+        },
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: `Voici la todo list de ${person} (ci-dessus, au format JSON). Fais-en un résumé en français : nombre total, combien terminés/en cours, et signale les todos qui semblent prioritaires ou en retard.`,
+          },
+        },
+      ],
+    };
   }
 );
 
