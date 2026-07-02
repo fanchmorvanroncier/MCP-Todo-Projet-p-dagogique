@@ -2,3 +2,4 @@ node_modules/
 dist/
 data/*.json
 .claude/settings.local.json
+recap clickup.md
