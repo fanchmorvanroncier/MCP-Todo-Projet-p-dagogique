@@ -101,5 +101,4 @@ Pas de vraie base de données — c'est volontaire, pour rester simple et se con
 ## Aller plus loin
 
 - Le code se lit en ~10 minutes : `src/storage.ts` puis `src/index.ts`.
-- Piste d'évolution : remplacer le stockage JSON par une vraie base (SQLite, Postgres...) sans toucher à la couche MCP — bonne façon de vérifier que le protocole est indépendant du stockage.
 - Doc officielle du protocole : [modelcontextprotocol.io](https://modelcontextprotocol.io)
