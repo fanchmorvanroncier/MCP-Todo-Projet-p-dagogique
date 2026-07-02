@@ -48,10 +48,12 @@ Le fichier `.mcp.json` à la racine du projet déclare déjà le serveur (`comma
 
 ### Option C — Claude Desktop
 
-Éditer le fichier de config de Claude Desktop et ajouter une entrée `todo` :
-
-- Windows : `%APPDATA%\Claude\claude_desktop_config.json`
-- macOS : `~/Library/Application Support/Claude/claude_desktop_config.json`
+1. Faire `npm run build` d'abord (Claude Desktop lance le JS compilé dans `dist/`, pas le TS directement).
+2. Ouvrir Claude Desktop.
+3. Cliquer sur le menu **Claude** (en haut à gauche) → **Settings**.
+4. Aller dans l'onglet **Developer**.
+5. Cliquer sur **Edit Config** — Claude Desktop ouvre automatiquement le fichier de config dans l'explorateur de fichiers/éditeur par défaut (pas besoin de connaître ou taper le chemin soi-même).
+6. Ouvrir ce fichier et y coller (ou fusionner s'il y a déjà des serveurs déclarés) :
 
 ```json
 {
@@ -64,7 +66,9 @@ Le fichier `.mcp.json` à la racine du projet déclare déjà le serveur (`comma
 }
 ```
 
-Remplacer le chemin par le chemin absolu réel sur ta machine. Faire `npm run build` avant (Claude Desktop lance le JS compilé, pas le TS directement), puis redémarrer Claude Desktop.
+7. Remplacer le chemin par le chemin absolu réel du dossier cloné sur ta machine.
+8. Enregistrer le fichier, puis **quitter et rouvrir Claude Desktop** (pas juste fermer la fenêtre — le relancer entièrement) pour qu'il recharge la config.
+9. Le serveur `todo` doit apparaître dans Settings → Developer avec un statut connecté, et ses outils sont utilisables dans la conversation (icône marteau 🔨 en bas de la zone de saisie).
 
 ## Scripts npm
 
