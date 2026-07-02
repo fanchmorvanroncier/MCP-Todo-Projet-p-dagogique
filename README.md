@@ -36,6 +36,7 @@ En plus des outils (les *tools*, qui font une action), le serveur expose les deu
 
 - **Resource** `todo://{person}/todos` (template dynamique) — expose le contenu JSON brut de la todo list d'une personne, en lecture seule. Le client peut la lister (`resources/list`, une entrée par fichier `data/todos-*.json` existant) ou la lire directement par URI (`resources/read`).
 - **Prompt** `todo_status_report(person)` — génère un message pré-rempli qui embarque la todo list de la personne (via la resource ci-dessus) suivi d'une instruction demandant un résumé en français (total, terminés/en cours, priorités). Utile pour voir comment un prompt MCP peut assembler du contexte pour l'assistant plutôt que de laisser l'utilisateur le taper à la main.
+- **Prompt** `plan_my_day(person)` — embarque uniquement les todos en attente et demande un ordre de priorité, en suggérant d'utiliser `complete_todo`/`update_todo` si un todo semble déjà fait ou obsolète. Montre qu'un prompt peut orienter l'assistant vers l'usage d'autres outils plutôt que de simplement lire.
 
 Pour tester sans UI, l'Inspector a un mode CLI non-interactif :
 

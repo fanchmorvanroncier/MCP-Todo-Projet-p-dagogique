@@ -172,6 +172,43 @@ server.registerPrompt(
   }
 );
 
+server.registerPrompt(
+  "plan_my_day",
+  {
+    title: "Planifier ma journée",
+    description: "Récupère les todos en attente d'une personne et demande à Claude de proposer un ordre de priorité, en s'appuyant sur les outils complete_todo/update_todo si besoin",
+    argsSchema: {
+      person: z.string().describe("Nom de la personne pour qui planifier la journée"),
+    },
+  },
+  async ({ person }) => {
+    const todos = await listTodos(person);
+    const pending = todos.filter((t) => !t.done);
+    return {
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "resource",
+            resource: {
+              uri: `todo://${person}/todos`,
+              mimeType: "application/json",
+              text: JSON.stringify(pending, null, 2),
+            },
+          },
+        },
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: `Voici les todos en attente de ${person} (ci-dessus, au format JSON). Propose un ordre de priorité pour la journée, avec une justification courte pour chaque todo. Si un todo te semble déjà fait ou obsolète, propose de le marquer terminé avec l'outil complete_todo (ou de le reformuler avec update_todo) plutôt que de te contenter de le lister.`,
+          },
+        },
+      ],
+    };
+  }
+);
+
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
