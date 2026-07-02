@@ -52,7 +52,7 @@ Le fichier `.mcp.json` à la racine du projet déclare déjà le serveur (`comma
 2. Ouvrir Claude Desktop.
 3. Cliquer sur le menu de l'application **Claude** (en haut à gauche de la fenêtre) → **Paramètres...**. Attention : ce n'est pas l'icône de réglages à l'intérieur d'une conversation, mais bien le menu de l'application elle-même.
 4. Dans la fenêtre qui s'ouvre, aller sur l'onglet **Développeur** (dans la barre latérale).
-5. Cliquer sur **Modifier la configuration**. Ce bouton ouvre directement le fichier `claude_desktop_config.json` dans ton éditeur de texte par défaut (et le crée s'il n'existe pas encore) — inutile de le chercher toi-même. Sous Windows, il se trouve normalement dans `%APPDATA%\Claude\claude_desktop_config.json`.
+5. Cliquer sur **Modifier la configuration**. Ce bouton ouvre directement le fichier `claude_desktop_config.json` dans ton éditeur de texte par défaut (et le crée s'il n'existe pas encore) — inutile de le chercher toi-même. Sous Windows, il se trouve normalement dans `%APPDATA%\Claude\claude_desktop_config.json` ; si l'app est installée via le Microsoft Store (MSIX), le fichier réellement lu est plutôt dans `%LOCALAPPDATA%\Packages\Claude_<identifiant>\LocalCache\Roaming\Claude\claude_desktop_config.json` — mais le bouton **Modifier la configuration** ouvre déjà le bon fichier automatiquement, pas besoin de choisir.
 6. Dans ce fichier, coller (ou fusionner s'il y a déjà d'autres serveurs déclarés) :
 
 ```json
@@ -68,7 +68,11 @@ Le fichier `.mcp.json` à la racine du projet déclare déjà le serveur (`comma
 
 7. Remplacer le chemin par le chemin absolu réel du dossier cloné sur ta machine (sous Windows, penser à doubler les antislashs dans le JSON, ex. `"C:\\Users\\toi\\...\\MCP-Todo-Projet-p-dagogique\\dist\\index.js"`).
 8. Enregistrer le fichier, puis **quitter et rouvrir Claude Desktop entièrement** (pas juste fermer la fenêtre) pour qu'il recharge la config.
-9. Une fois reconnecté, une icône en forme de marteau 🔨 apparaît dans le coin inférieur droit de la zone de saisie de la conversation ; cliquer dessus doit lister les outils `add_todo`, `list_todos`, etc. Si le serveur `todo` n'apparaît pas, retourner dans **Paramètres → Développeur** pour vérifier son statut, et si besoin consulter les logs (`%APPDATA%\Claude\logs\mcp*.log` sous Windows).
+9. Une fois reconnecté, un indicateur d'outils (icône en forme de marteau 🔨 dans les versions classiques ; le nom/l'emplacement exact peut varier selon la version de l'app) apparaît près de la zone de saisie de la conversation. Le test le plus fiable reste néanmoins de l'utiliser directement : ouvrir une **nouvelle conversation** et demander par exemple *« Ajoute un todo "test" pour \<ton prénom> avec l'outil add_todo »* — Claude doit proposer d'utiliser l'outil (demande d'approbation), puis créer l'entrée dans `data/todos-<prénom>.json`.
+
+**En cas de souci :**
+- Vérifier dans **Paramètres → Développeur** que le serveur `todo` apparaît avec un statut connecté.
+- Consulter les logs : `%APPDATA%\Claude\logs\mcp*.log` sous Windows (ou `%LOCALAPPDATA%\Packages\Claude_<identifiant>\LocalCache\Roaming\Claude\logs\mcp*.log` pour une install MSIX). Une ligne `Server started and connected successfully` dans `mcp-server-todo.log` confirme que la connexion fonctionne réellement, même si l'interface ne l'affiche pas clairement.
 
 ## Scripts npm
 
